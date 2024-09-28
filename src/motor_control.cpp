@@ -100,7 +100,7 @@ void controlMotors(int initialSpeedL, int initialSpeedR, long targetPulses, bool
 // 讀取IR感測器，白色為0，黑色為1
 
 // PID循跡
-void PID_trail(bool useFiveIR)
+void PID_trail(bool useFiveIR, bool (*exitCondition)())
 {
     const int minimumSpeed = -255; // 最小速度
     const int maximumSpeed = 255;  // 最大速度
@@ -116,7 +116,7 @@ void PID_trail(bool useFiveIR)
     {
         IR_update();
 
-        if (IR_LL == 1 || IR_RR == 1)
+        if (exitCondition())
         {
             break;
         }

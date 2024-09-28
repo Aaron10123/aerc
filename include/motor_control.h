@@ -33,7 +33,7 @@ void motor(int speedL, int speedR);
 // 控制左右輪的馬達，並移動到指定的目標脈衝數
 void controlMotors(int speedL, int speedR, long targetPulses, bool autoSync);
 // PID循跡
-void PID_trail(bool useFiveIR);
+void PID_trail(bool useFiveIR, bool (*exitCondition)());
 // 循跡
 void trail();
 // 小左
