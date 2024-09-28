@@ -121,7 +121,7 @@ void PID_trail(bool useFiveIR)
             break;
         }
         // 計算偏差值
-        int error = IR_L * -1 + IR_M * 0 + IR_R * 1;
+        int error = IR_L * -1 + IR_M * 0 + IR_R * 1; // 預設使用三個紅外線感測器
         if (useFiveIR)
         {
             error = IR_LL * -4 + IR_L * -1 + IR_M * 0 + IR_R * 1 + IR_RR * 4;
