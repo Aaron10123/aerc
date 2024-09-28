@@ -14,11 +14,11 @@ extern const int motorLeftDir;     // 左輪馬達方向
 extern const int motorRightDir;    // 右輪馬達方向
 extern const int IR[5];            // A1~A5為紅外線數值
 
-extern volatile int IR_LL;
-extern volatile int IR_L;
-extern volatile int IR_M;
-extern volatile int IR_R;
-extern volatile int IR_RR;
+extern volatile int IR_LL; // 最左的紅外線感測器
+extern volatile int IR_L;  // 中左的紅外線感測器
+extern volatile int IR_M;  // 中間的紅外線感測器
+extern volatile int IR_R;  // 中右的紅外線感測器
+extern volatile int IR_RR; // 最右的紅外線感測器
 
 // 指令宣告區，用來快速查看指令的功能，案住Ctrl並點擊名稱即可跳轉到指令的功能
 
