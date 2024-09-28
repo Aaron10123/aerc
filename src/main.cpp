@@ -44,6 +44,6 @@ void loop()
     if (buttonState == LOW)
     {
         // PD循跡
-        PID_trail();
+        // PID_trail();
     }
 }
