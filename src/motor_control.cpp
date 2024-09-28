@@ -98,7 +98,7 @@ void controlMotors(int initialSpeedL, int initialSpeedR, long targetPulses, bool
 // 沿著黑線走，紅外線感測器的數值為0~1023，白色為0，黑色為1023
 // 排列方式為IR[0]~IR[4]，IR[0]為最左邊的感測器，IR[4]為最右邊的感測器
 // 讀取IR感測器，白色為0，黑色為1
-void PID_trail()
+void PID_trail(bool useFiveIR)
 {
     const int minimumSpeed = -255; // 最小速度
     const int maximumSpeed = 255;  // 最大速度
@@ -113,22 +113,21 @@ void PID_trail()
     while (true)
     {
         // 讀取IR感測器，白色為0，黑色為1
-        int IR_LL = analogRead(IR[0]) > 450 ? 1 : 0;
-        int IR_L = analogRead(IR[1]) > 450 ? 1 : 0;
-        int IR_M = analogRead(IR[2]) > 450 ? 1 : 0;
-        int IR_R = analogRead(IR[3]) > 450 ? 1 : 0;
-        int IR_RR = analogRead(IR[4]) > 450 ? 1 : 0;
+        IR_update();
 
         if (IR_LL == 1 || IR_RR == 1)
         {
             break;
         }
         // 計算偏差值
-        // int error = IR_LL * -4 + IR_L * -1 + IR_M * 0 + IR_R * 1 + IR_RR * 4;
         int error = IR_L * -1 + IR_M * 0 + IR_R * 1;
+        if (useFiveIR)
+        {
+            error = IR_LL * -4 + IR_L * -1 + IR_M * 0 + IR_R * 1 + IR_RR * 4;
+        }
         if (IR_M == 1 && IR_L == 0 && IR_R == 0)
         {
-            int error = 0;
+            error = 0;
         }
 
         // 計算積分項
@@ -160,11 +159,7 @@ void PID_trail()
 void trail()
 {
     // 讀取IR感測器，白色為0，黑色為1
-    int IR_LL = analogRead(IR[0]) > 450 ? 1 : 0;
-    int IR_L = analogRead(IR[1]) > 450 ? 1 : 0;
-    int IR_M = analogRead(IR[2]) > 450 ? 1 : 0;
-    int IR_R = analogRead(IR[3]) > 450 ? 1 : 0;
-    int IR_RR = analogRead(IR[4]) > 450 ? 1 : 0;
+    IR_update();
     if (IR_M)
     {
         if (IR_L)
@@ -184,17 +179,11 @@ void trail()
     {
         if (IR_L)
         {
-            // while (!(analogRead(IR[2]) > 450))
-            {
-                mid_turn_left();
-            }
+            mid_turn_left();
         }
         else if (IR_R)
         {
-            // while (!(analogRead(IR[2]) > 450))
-            {
-                mid_turn_right();
-            }
+            mid_turn_right();
         }
     }
 }

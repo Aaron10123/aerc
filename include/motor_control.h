@@ -14,11 +14,11 @@ extern const int motorLeftDir;     // 左輪馬達方向
 extern const int motorRightDir;    // 右輪馬達方向
 extern const int IR[5];            // A1~A5為紅外線數值
 
-extern int IR_LL;
-extern int IR_L;
-extern int IR_M;
-extern int IR_R;
-extern int IR_RR;
+extern volatile int IR_LL;
+extern volatile int IR_L;
+extern volatile int IR_M;
+extern volatile int IR_R;
+extern volatile int IR_RR;
 
 // 指令宣告區，用來快速查看指令的功能，案住Ctrl並點擊名稱即可跳轉到指令的功能
 
@@ -33,7 +33,7 @@ void motor(int speedL, int speedR);
 // 控制左右輪的馬達，並移動到指定的目標脈衝數
 void controlMotors(int speedL, int speedR, long targetPulses, bool autoSync);
 // PD循跡
-void PID_trail();
+void PID_trail(bool useFiveIR);
 // 循跡
 void trail();
 // 小左

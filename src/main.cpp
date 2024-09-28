@@ -11,11 +11,12 @@ const int motorLeftDir = 4;     // 左輪馬達方向
 const int motorRightDir = 7;    // 右輪馬達方向
 const int buttonPin = 8;        // 按鈕連接到 Pin 2
 int buttonState = 0;            // 變量來儲存按鈕狀態
-int IR_LL = 0;
-int IR_L = 0;
-int IR_M = 0;
-int IR_R = 0;
-int IR_RR = 0;
+
+volatile int IR_LL = 0;
+volatile int IR_L = 0;
+volatile int IR_M = 0;
+volatile int IR_R = 0;
+volatile int IR_RR = 0;
 
 // A1~A5為紅外線數值
 const int IR[5] = {A1, A2, A3, A4, A5};
@@ -45,12 +46,6 @@ void setup()
     while (buttonState)
     {
         buttonState = digitalRead(buttonPin);
-        // if (buttonState == LOW)
-        // {
-        //     // PD循跡
-        //     // PID_trail();
-        //     break;
-        // }
     }
 
     IR_update();
@@ -58,7 +53,7 @@ void setup()
     {
         IR_update();
         // trail();
-        PID_trail();
+        PID_trail(false);
     }
     stop();
 }
