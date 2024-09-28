@@ -49,14 +49,11 @@ void setup()
     }
 
     IR_update();
-    auto exitOnEdge = []()
-    {
-        return (IR_LL == 1 || IR_RR == 1);
-    };
     while (!(IR_L == 0 && IR_M == 0 && IR_R == 0)) // 三個紅外線感測器都是白色就結束迴圈
     {
         // trail();
-        PID_trail(false, exitOnEdge);
+        PID_trail(false, []()
+                  { return (IR_LL == 1 || IR_RR == 1); });
     }
     stop();
 }
