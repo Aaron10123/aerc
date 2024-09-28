@@ -50,7 +50,7 @@ void setup()
 
     IR_update();
     PID_trail(false, []()
-              { return (IR_LL == 1 || IR_RR == 1); });
+              { return (IR_LL == 1 || IR_RR == 1); }, 310, 0, 0, 250);
 }
 
 void loop()

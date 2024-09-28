@@ -100,17 +100,12 @@ void controlMotors(int initialSpeedL, int initialSpeedR, long targetPulses, bool
 // 讀取IR感測器，白色為0，黑色為1
 
 // PID循跡
-void PID_trail(bool useFiveIR, bool (*exitCondition)())
+void PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Ki, float Kd, int baseSpeed)
 {
     const int minimumSpeed = -255; // 最小速度
     const int maximumSpeed = 255;  // 最大速度
-    float Kp = 310;                // 70=速度150,
-    float Kd = 0;                  // 50 數值越大對於大轉彎反應越慢
-    float Ki = 0;                  // 0.1積分增益，需要根據實際情況調整
-
-    int baseSpeed = 250; // 基本速度
-    int lastError = 0;   // 上一次的偏差值
-    int integral = 0;    // 積分項
+    int lastError = 0;             // 上一次的偏差值
+    int integral = 0;              // 積分項
 
     while (true)
     {
