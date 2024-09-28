@@ -57,7 +57,8 @@ void setup()
     while (!(IR_L == 0 && IR_M == 0 && IR_R == 0))
     {
         IR_update();
-        trail();
+        // trail();
+        PID_trail();
     }
     stop();
 }

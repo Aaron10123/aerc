@@ -102,11 +102,11 @@ void PID_trail()
 {
     const int minimumSpeed = -255; // 最小速度
     const int maximumSpeed = 255;  // 最大速度
-    float Kp = 70;                 // 70比例增益，需要根據實際情況調整
-    float Kd = 200;                // 50 數值越大對於大轉彎反應越慢
+    float Kp = 310;                // 70=速度150,
+    float Kd = 0;                  // 50 數值越大對於大轉彎反應越慢
     float Ki = 0;                  // 0.1積分增益，需要根據實際情況調整
 
-    int baseSpeed = 150; // 基本速度
+    int baseSpeed = 250; // 基本速度
     int lastError = 0;   // 上一次的偏差值
     int integral = 0;    // 積分項
 
@@ -119,8 +119,17 @@ void PID_trail()
         int IR_R = analogRead(IR[3]) > 450 ? 1 : 0;
         int IR_RR = analogRead(IR[4]) > 450 ? 1 : 0;
 
+        if (IR_LL == 1 || IR_RR == 1)
+        {
+            break;
+        }
         // 計算偏差值
-        int error = IR_LL * -4 + IR_L * -1 + IR_M * 0 + IR_R * 1 + IR_RR * 4;
+        // int error = IR_LL * -4 + IR_L * -1 + IR_M * 0 + IR_R * 1 + IR_RR * 4;
+        int error = IR_L * -1 + IR_M * 0 + IR_R * 1;
+        if (IR_M == 1 && IR_L == 0 && IR_R == 0)
+        {
+            int error = 0;
+        }
 
         // 計算積分項
         integral += error;
@@ -145,6 +154,7 @@ void PID_trail()
         // 更新上一次的偏差值
         lastError = error;
     }
+    stop();
 }
 
 void trail()
