@@ -6,6 +6,17 @@
 volatile long pulseLeft = 0;  // 左輪的脈衝數
 volatile long pulseRight = 0; // 右輪的脈衝數
 
+// 更新IR感測器
+void IR_update()
+{
+    // 讀取IR感測器，白色為0，黑色為1
+    IR_LL = analogRead(IR[0]) > 450 ? 1 : 0;
+    IR_L = analogRead(IR[1]) > 450 ? 1 : 0;
+    IR_M = analogRead(IR[2]) > 450 ? 1 : 0;
+    IR_R = analogRead(IR[3]) > 450 ? 1 : 0;
+    IR_RR = analogRead(IR[4]) > 450 ? 1 : 0;
+}
+
 // 更新左輪的脈衝數
 void updateLeftPulse()
 {
@@ -92,7 +103,7 @@ void PID_trail()
     const int minimumSpeed = -255; // 最小速度
     const int maximumSpeed = 255;  // 最大速度
     float Kp = 70;                 // 70比例增益，需要根據實際情況調整
-    float Kd = 200;                 // 50 數值越大對於大轉彎反應越慢
+    float Kd = 200;                // 50 數值越大對於大轉彎反應越慢
     float Ki = 0;                  // 0.1積分增益，需要根據實際情況調整
 
     int baseSpeed = 150; // 基本速度
@@ -134,4 +145,85 @@ void PID_trail()
         // 更新上一次的偏差值
         lastError = error;
     }
+}
+
+void trail()
+{
+    // 讀取IR感測器，白色為0，黑色為1
+    int IR_LL = analogRead(IR[0]) > 450 ? 1 : 0;
+    int IR_L = analogRead(IR[1]) > 450 ? 1 : 0;
+    int IR_M = analogRead(IR[2]) > 450 ? 1 : 0;
+    int IR_R = analogRead(IR[3]) > 450 ? 1 : 0;
+    int IR_RR = analogRead(IR[4]) > 450 ? 1 : 0;
+    if (IR_M)
+    {
+        if (IR_L)
+        {
+            small_turn_left();
+        }
+        else if (IR_R)
+        {
+            small_turn_right();
+        }
+        else if (IR_L == 0 && IR_R == 0)
+        {
+            forward();
+        }
+    }
+    else
+    {
+        if (IR_L)
+        {
+            // while (!(analogRead(IR[2]) > 450))
+            {
+                mid_turn_left();
+            }
+        }
+        else if (IR_R)
+        {
+            // while (!(analogRead(IR[2]) > 450))
+            {
+                mid_turn_right();
+            }
+        }
+    }
+}
+
+void forward()
+{
+    motor(100, 100);
+}
+
+void small_turn_left()
+{
+    motor(80, 100);
+}
+
+void small_turn_right()
+{
+    motor(100, 80);
+}
+
+void mid_turn_left()
+{
+    motor(0, 100);
+}
+void mid_turn_right()
+{
+    motor(100, 0);
+}
+
+void big_turn_left()
+{
+    motor(-100, 100);
+}
+
+void big_turn_right()
+{
+    motor(100, -100);
+}
+
+void stop()
+{
+    motor(0, 0);
 }
