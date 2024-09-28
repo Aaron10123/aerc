@@ -22,7 +22,7 @@ extern volatile int IR_RR;
 
 // 指令宣告區，用來快速查看指令的功能，案住Ctrl並點擊名稱即可跳轉到指令的功能
 
-// 更新IR感測器
+// 更新IR感測器, 白色為0, 黑色為1
 void IR_update();
 // 更新左輪的脈衝數
 void updateLeftPulse();
@@ -32,7 +32,7 @@ void updateRightPulse();
 void motor(int speedL, int speedR);
 // 控制左右輪的馬達，並移動到指定的目標脈衝數
 void controlMotors(int speedL, int speedR, long targetPulses, bool autoSync);
-// PD循跡
+// PID循跡
 void PID_trail(bool useFiveIR);
 // 循跡
 void trail();

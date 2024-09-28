@@ -49,9 +49,8 @@ void setup()
     }
 
     IR_update();
-    while (!(IR_L == 0 && IR_M == 0 && IR_R == 0))
+    while (!(IR_L == 0 && IR_M == 0 && IR_R == 0)) // 三個紅外線感測器都是白色就結束迴圈
     {
-        IR_update();
         // trail();
         PID_trail(false);
     }

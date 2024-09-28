@@ -6,7 +6,7 @@
 volatile long pulseLeft = 0;  // 左輪的脈衝數
 volatile long pulseRight = 0; // 右輪的脈衝數
 
-// 更新IR感測器
+// 更新IR感測器, 白色為0, 黑色為1
 void IR_update()
 {
     // 讀取IR感測器，白色為0，黑色為1
@@ -98,6 +98,8 @@ void controlMotors(int initialSpeedL, int initialSpeedR, long targetPulses, bool
 // 沿著黑線走，紅外線感測器的數值為0~1023，白色為0，黑色為1023
 // 排列方式為IR[0]~IR[4]，IR[0]為最左邊的感測器，IR[4]為最右邊的感測器
 // 讀取IR感測器，白色為0，黑色為1
+
+// PID循跡
 void PID_trail(bool useFiveIR)
 {
     const int minimumSpeed = -255; // 最小速度
@@ -112,7 +114,6 @@ void PID_trail(bool useFiveIR)
 
     while (true)
     {
-        // 讀取IR感測器，白色為0，黑色為1
         IR_update();
 
         if (IR_LL == 1 || IR_RR == 1)
@@ -158,7 +159,6 @@ void PID_trail(bool useFiveIR)
 
 void trail()
 {
-    // 讀取IR感測器，白色為0，黑色為1
     IR_update();
     if (IR_M)
     {
