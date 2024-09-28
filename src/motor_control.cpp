@@ -152,6 +152,7 @@ void PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Ki, floa
     stop();
 }
 
+// 循跡
 void trail()
 {
     IR_update();
@@ -183,40 +184,49 @@ void trail()
     }
 }
 
+// 前進
 void forward()
 {
     motor(100, 100);
 }
 
+// 小左
 void small_turn_left()
 {
     motor(80, 100);
 }
 
+// 小右
 void small_turn_right()
 {
     motor(100, 80);
 }
 
+// 中左
 void mid_turn_left()
 {
     motor(0, 100);
 }
+
+// 中右
 void mid_turn_right()
 {
     motor(100, 0);
 }
 
+// 大左
 void big_turn_left()
 {
     motor(-100, 100);
 }
 
+// 大右
 void big_turn_right()
 {
     motor(100, -100);
 }
 
+// 停止
 void stop()
 {
     motor(0, 0);
