@@ -48,11 +48,11 @@ void setup()
         buttonState = digitalRead(buttonPin);
     }
 
-    IR_update();
-    PID_trail(false, []()
-              { return (IR_LL == 1 || IR_RR == 1); }, 310, 0, 0, 250);
+    // PID_trail(true, []()
+    //           { return (IR_LL == 1 || IR_RR == 1); }, 100, 0, 0, 250);
 }
 
 void loop()
 {
+    trail();
 }

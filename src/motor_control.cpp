@@ -187,43 +187,43 @@ void trail()
 // 前進
 void forward()
 {
-    motor(100, 100);
+    motor(255, 255);
 }
 
 // 小左
 void small_turn_left()
 {
-    motor(80, 100);
+    motor(200, 255);
 }
 
 // 小右
 void small_turn_right()
 {
-    motor(100, 80);
+    motor(255, 200);
 }
 
 // 中左
 void mid_turn_left()
 {
-    motor(0, 100);
+    motor(0, 255);
 }
 
 // 中右
 void mid_turn_right()
 {
-    motor(100, 0);
+    motor(255, 0);
 }
 
 // 大左
 void big_turn_left()
 {
-    motor(-100, 100);
+    motor(-255, 255);
 }
 
 // 大右
 void big_turn_right()
 {
-    motor(100, -100);
+    motor(255, -255);
 }
 
 // 停止
