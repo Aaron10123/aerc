@@ -111,9 +111,17 @@ void PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, floa
         int error = IR_L * -1 + IR_M * 0 + IR_R * 1; // 預設使用三個紅外線感測器
         if (useFiveIR)
         {
+            // 如果全部都是0代表都在白色區域則維持之前狀態，否則進行調整
+            if (IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 0)
+            {
+                error = lastError;
+            }
+            else
+        {
             error = IR_LL * -4 + IR_L * -1 + IR_M * 0 + IR_R * 1 + IR_RR * 4;
         }
-        if (IR_M == 1 && IR_L == 0 && IR_R == 0)
+        }
+        if (IR_M == 1 && IR_L == 0 && IR_R == 0 && IR_LL == 0 && IR_RR == 0)
         {
             error = 0;
         }
