@@ -49,12 +49,57 @@ void setup()
     {
         buttonState = digitalRead(buttonPin);
     }
-
     // PID_trail(true, []()
     //           { return (IR_LL == 1 || IR_RR == 1); }, 100, 0, 0, 250);
+    while (IR_RR == 0)
+    {
+        trail();
+    }
+    big_turn_right();
+    delay(50);
+    IR_update();
+    while (!(IR_RR))
+    {
+        IR_update();
+        motor(80, -100);
+    }
+
+    while (!(IR_RR == 0))
+    {
+        IR_update();
+    }
+
+    IR_update();
+    while (!(IR_RR == 1))
+    {
+        trail();
+    }
+
+    while (!(IR_LL))
+    {
+        trail();
+    }
+
+    mid_turn_left();
+    delay(150);
+    IR_update();
+    while (!(IR_LL == 1))
+    {
+        IR_update();
+        big_turn_left();
+    }
+    forward();
+    delay(100);
+    IR_update();
+    while (!(IR_RR))
+    {
+        trail();
+    }
+
+    stop();
 }
 
 void loop()
 {
-    trail();
+    // trail();
 }

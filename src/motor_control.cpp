@@ -117,9 +117,9 @@ void PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, floa
                 error = lastError;
             }
             else
-        {
-            error = IR_LL * -4 + IR_L * -1 + IR_M * 0 + IR_R * 1 + IR_RR * 4;
-        }
+            {
+                error = IR_LL * -4 + IR_L * -1 + IR_M * 0 + IR_R * 1 + IR_RR * 4;
+            }
         }
         if (IR_M == 1 && IR_L == 0 && IR_R == 0 && IR_LL == 0 && IR_RR == 0)
         {
@@ -175,11 +175,33 @@ void trail()
     {
         if (IR_L)
         {
-            mid_turn_left();
+            if (IR_LL)
+            {
+                big_turn_left();
+            }
+            else
+            {
+                mid_turn_left();
+            }
+        }
+        else if (IR_LL)
+        {
+            big_turn_left();
         }
         else if (IR_R)
         {
-            mid_turn_right();
+            if (IR_RR)
+            {
+                big_turn_right();
+            }
+            else
+            {
+                mid_turn_right();
+            }
+        }
+        else if (IR_RR)
+        {
+            big_turn_right();
         }
     }
 }
@@ -217,13 +239,13 @@ void mid_turn_right()
 // 大左
 void big_turn_left()
 {
-    motor(-255, 255);
+    motor(-100, 100);
 }
 
 // 大右
 void big_turn_right()
 {
-    motor(255, -255);
+    motor(100, -100);
 }
 
 // 停止
