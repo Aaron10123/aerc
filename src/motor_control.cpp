@@ -52,7 +52,7 @@ void controlMotors(int initialSpeedL, int initialSpeedR, long targetPulses, bool
     while (pulseLeft < targetPulses && pulseRight < targetPulses)
     {
         if (autoSync)
-        {
+        { // 假設pulseLeft=100, pulseRight=90, 左邊輪子比較快
             long pulseDifference = pulseLeft - pulseRight;
 
             int adjustment = Kp * pulseDifference;
@@ -166,14 +166,14 @@ void trail()
         {
             small_turn_right();
         }
-        else if (IR_L == 0 && IR_R == 0)
+        else
         {
             forward();
         }
     }
     else
     {
-        if (IR_L)
+        if (IR_L || IR_LL)
         {
             if (IR_LL)
             {
@@ -184,11 +184,7 @@ void trail()
                 mid_turn_left();
             }
         }
-        else if (IR_LL)
-        {
-            big_turn_left();
-        }
-        else if (IR_R)
+        else if (IR_R || IR_RR)
         {
             if (IR_RR)
             {
@@ -199,57 +195,92 @@ void trail()
                 mid_turn_right();
             }
         }
-        else if (IR_RR)
+    }
+}
+void trail_X()
+{
+    IR_update();
+    if (IR_M)
+    {
+        if (IR_L)
+        {
+            mid_turn_left();
+        }
+        else if (IR_R)
+        {
+            mid_turn_right();
+        }
+        else
+        {
+            forward();
+        }
+    }
+    else
+    {
+        if (IR_L)
+        {
+            big_turn_left();
+        }
+        else if (IR_R)
         {
             big_turn_right();
         }
     }
 }
-
 // 前進
 void forward()
 {
+    IR_update();
     motor(255, 255);
 }
 
 // 小左
 void small_turn_left()
 {
-    motor(200, 255);
+    IR_update();
+    motor(220, 255);
 }
 
 // 小右
 void small_turn_right()
 {
-    motor(255, 200);
+    IR_update();
+    motor(255, 220);
 }
 
 // 中左
 void mid_turn_left()
 {
-    motor(0, 255);
+    IR_update();
+    motor(100, 255);
 }
 
 // 中右
 void mid_turn_right()
 {
-    motor(255, 0);
+    IR_update();
+    motor(255, 100);
 }
 
 // 大左
 void big_turn_left()
 {
-    motor(-100, 100);
+    IR_update();
+    motor(30, 245);
 }
 
 // 大右
 void big_turn_right()
 {
-    motor(100, -100);
+    IR_update();
+    motor(245, 30);
 }
 
 // 停止
 void stop()
 {
+    IR_update();
+    motor(-255, -255);
+    delay(10);
     motor(0, 0);
 }
