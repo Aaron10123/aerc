@@ -16,7 +16,7 @@ volatile int IR_LL = 0;
 volatile int IR_L = 0;
 volatile int IR_M = 0;
 volatile int IR_R = 0;
-volatile int IR_RR = 0;
+volatile int IR_RR = 0;// 最右的紅外線感測器
 volatile long pulseLeft = 0;  // 左輪的脈衝數
 volatile long pulseRight = 0; // 右輪的脈衝數
 
@@ -49,16 +49,15 @@ void setup()
     {
         buttonState = digitalRead(buttonPin);
     }
-    // PID_trail(true, []()
-    //           { return (IR_LL == 1 || IR_RR == 1); }, 100, 0, 0, 250);
-    while (IR_RR == 0)
+
+    while (!(IR_RR))//直到RR紅外線看到黑
     {
         trail();
     }
     big_turn_right();
     delay(50);
     IR_update();
-    while (!(IR_RR))
+    while (!(IR_RR))//直到RR紅外線看到黑(1↑)
     {
         IR_update();
         motor(80, -100);
@@ -70,7 +69,7 @@ void setup()
     }
 
     IR_update();
-    while (!(IR_RR == 1))
+    while (!(IR_RR == 1))//(2↑)
     {
         trail();
     }
@@ -79,22 +78,30 @@ void setup()
     {
         trail();
     }
-
-    mid_turn_left();
-    delay(150);
+    // big_turn_left();
+    // delay(150);
+    // IR_update();
+    // while (!(IR_LL)==1)
+    // {
+    //     IR_update();
+    //     big_turn_left();
+    // }
+    motor(-150, 205);//左迴轉
+    delay(375);
     IR_update();
-    while (!(IR_LL == 1))
-    {
-        IR_update();
-        big_turn_left();
-    }
-    forward();
-    delay(100);
-    IR_update();
-    while (!(IR_RR))
-    {
+     while ((IR_R==1)and(IR_L==1)and(IR_M==1))
+     {
         trail();
-    }
+     }
+     
+    
+    // forward();
+    // delay(100);
+    // IR_update();
+    // while (!(IR_RR))
+    // {
+    //     trail();
+    // }
 
     stop();
 }
