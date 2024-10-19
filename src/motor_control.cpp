@@ -284,3 +284,13 @@ void stop()
     delay(10);
     motor(0, 0);
 }
+
+void cmd_for_ms(void (*command)(), unsigned long ms)
+{
+    unsigned long start_time = millis();
+    while (millis() - start_time < ms)
+    {
+        command();
+    }
+    stop();
+}

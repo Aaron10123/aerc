@@ -54,4 +54,7 @@ void big_turn_right();
 void forward();
 // 停止
 void stop();
+
+void cmd_for_ms(void (*command)(), unsigned long ms);
+
 #endif // MOTOR_CONTROL_H
