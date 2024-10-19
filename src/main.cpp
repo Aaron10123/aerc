@@ -42,7 +42,10 @@ void setup()
     // 設置編碼器中斷
     // attachInterrupt(digitalPinToInterrupt(encoderLeftPinA), updateLeftPulse, RISING);
     // attachInterrupt(digitalPinToInterrupt(encoderRightPinA), updateRightPulse, RISING);
+}
 
+void loop()
+{
     Serial.begin(9600);
     buttonState = digitalRead(buttonPin);
     while (buttonState)
@@ -62,7 +65,7 @@ void setup()
     while (!(IR_RR)) // 直到RR紅外線看到黑(1↑)
     {
         IR_update();
-        motor(100, -150);
+        motor(80, -110);
     }
 
     while (!(IR_RR == 0))
@@ -76,36 +79,43 @@ void setup()
         trail();
     }
 
+    while (IR_RR)
+    {
+        forward();
+    }
+
+    while (!(IR_RR))
+    {
+        IR_update();
+        motor(70, -100);
+    }
     while (!(IR_LL))
     {
-        trail();
+        forward();
     }
-    while (!(IR_LL == 0))
+    while (!(IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 0))
     {
         forward();
     }
     while (!(IR_LL))
     {
         IR_update();
-        motor(-90, 140); // 左迴轉
+        motor(-100, 70); // 左迴轉
     }
-    while (!(IR_L))
-    {
-        IR_update();
-    }
-
-    cmd_for_ms(trail, 200);
+    forward();
+    delay(100);
+    cmd_for_ms(trail, 300);
     while (!(IR_L == 0 && IR_R == 0 && IR_M == 0))
     {
         trail();
     }
     motor(140, -110);
-    delay(200);
+    delay(250);
+    while (!(IR_RR))
+    {
+        IR_update();
+        motor(60, 225);
+    }
 
     stop();
-}
-
-void loop()
-{
-    // trail();
 }
