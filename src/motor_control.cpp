@@ -1,18 +1,25 @@
 #include <Arduino.h>
+#include <SoftwareWire.h>
+#include <U8g2lib.h>
 #include "motor_control.h"
 
-// volatile功能，告訴編譯器，這個變數可能會在程式的不同部分被更改
-// 所以編譯器要保持從記憶體中讀取變數的最新值，而不是從暫存器中讀取
+// 建立 SoftwareWire 物件
+SoftwareWire myWire(2, 3); // SDA 在 D2，SCL 在 D3
+
+// 使用 U8g2 庫並使用 SoftwareWire 作為 I2C 通訊
+U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, /* clock=*/3, /* data=*/2, /* reset=*/U8X8_PIN_NONE);
+
+#define IR_OFFSET 450
 
 // 更新IR感測器, 白色為0, 黑色為1
 void IR_update()
 {
     // 讀取IR感測器，白色為0，黑色為1
-    IR_LL = analogRead(IR[0]) > 450 ? 1 : 0;
-    IR_L = analogRead(IR[1]) > 450 ? 1 : 0;
-    IR_M = analogRead(IR[2]) > 450 ? 1 : 0;
-    IR_R = analogRead(IR[3]) > 450 ? 1 : 0;
-    IR_RR = analogRead(IR[4]) > 450 ? 1 : 0;
+    IR_LL = analogRead(IR[0]) > IR_OFFSET ? 1 : 0;
+    IR_L = analogRead(IR[1]) > IR_OFFSET ? 1 : 0;
+    IR_M = analogRead(IR[2]) > IR_OFFSET ? 1 : 0;
+    IR_R = analogRead(IR[3]) > IR_OFFSET ? 1 : 0;
+    IR_RR = analogRead(IR[4]) > IR_OFFSET ? 1 : 0;
 }
 
 // 更新左輪的脈衝數
@@ -52,7 +59,7 @@ void controlMotors(int initialSpeedL, int initialSpeedR, long targetPulses, bool
     while (pulseLeft < targetPulses && pulseRight < targetPulses)
     {
         if (autoSync)
-        { // 假設pulseLeft=100, pulseRight=90, 左邊輪子比較快
+        {
             long pulseDifference = pulseLeft - pulseRight;
 
             int adjustment = Kp * pulseDifference;
@@ -92,38 +99,95 @@ void controlMotors(int initialSpeedL, int initialSpeedR, long targetPulses, bool
 // 讀取IR感測器，白色為0，黑色為1
 
 // PID循跡
-void PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, float Ki, int baseSpeed)
+void PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, float Ki, int baseSpeed, unsigned long ms)
 {
     const int minimumSpeed = -255; // 最小速度
     const int maximumSpeed = 255;  // 最大速度
     int lastError = 0;             // 上一次的偏差值
     int integral = 0;              // 積分項
 
+    unsigned long start_time = millis();
+
     while (true)
     {
-        IR_update();
-
-        if (exitCondition())
+        if (ms > 0 && millis() - start_time >= ms)
         {
             break;
         }
+
+        IR_update();
         // 計算偏差值
-        int error = IR_L * -1 + IR_M * 0 + IR_R * 1; // 預設使用三個紅外線感測器
+        int error = 0;
+
         if (useFiveIR)
         {
-            // 如果全部都是0代表都在白色區域則維持之前狀態，否則進行調整
-            if (IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 0)
+            if (IR_LL == 0 && IR_L == 0 && IR_M == 1 && IR_R == 0 && IR_RR == 0)
             {
-                error = lastError;
+                error = 0;
+            }
+            else if (IR_LL == 0 && IR_L == 1 && IR_M == 1 && IR_R == 0 && IR_RR == 0)
+            {
+                error = -0.4;
+            }
+            else if (IR_LL == 0 && IR_L == 0 && IR_M == 1 && IR_R == 1 && IR_RR == 0)
+            {
+                error = 0.4;
+            }
+            else if (IR_LL == 0 && IR_L == 1 && IR_M == 0 && IR_R == 0 && IR_RR == 0)
+            {
+                error = -1.9;
+            }
+            else if (IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 1 && IR_RR == 0)
+            {
+                error = 1.9;
+            }
+            else if (IR_LL == 1 && IR_L == 1 && IR_M == 0 && IR_R == 0 && IR_RR == 0)
+            {
+                error = -2.8;
+            }
+            else if (IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 1 && IR_RR == 1)
+            {
+                error = 2.8;
+            }
+            else if (IR_LL == 1 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 0)
+            {
+                error = -4.4;
+            }
+            else if (IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 1)
+            {
+                error = 4.4;
             }
             else
             {
-                error = IR_LL * -4 + IR_L * -1 + IR_M * 0 + IR_R * 1 + IR_RR * 4;
+                error = lastError;
             }
         }
-        if (IR_M == 1 && IR_L == 0 && IR_R == 0 && IR_LL == 0 && IR_RR == 0)
+        else
         {
-            error = 0;
+            if (IR_L == 0 && IR_M == 1 && IR_R == 0)
+            {
+                error = 0;
+            }
+            else if (IR_L == 1 && IR_M == 1 && IR_R == 0)
+            {
+                error = -0.4;
+            }
+            else if (IR_L == 0 && IR_M == 1 && IR_R == 1)
+            {
+                error = 0.4;
+            }
+            else if (IR_L == 1 && IR_M == 0 && IR_R == 0)
+            {
+                error = -1.9;
+            }
+            else if (IR_L == 0 && IR_M == 0 && IR_R == 1)
+            {
+                error = 1.9;
+            }
+            else
+            {
+                error = lastError;
+            }
         }
 
         // 計算積分項
@@ -148,8 +212,12 @@ void PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, floa
 
         // 更新上一次的偏差值
         lastError = error;
+
+        if (ms == 0 && exitCondition())
+        {
+            break;
+        }
     }
-    stop();
 }
 
 // 循跡
@@ -197,6 +265,7 @@ void trail()
         }
     }
 }
+
 void trail_X()
 {
     IR_update();
@@ -293,4 +362,88 @@ void cmd_for_ms(void (*command)(), unsigned long ms)
         command();
     }
     stop();
+}
+
+void slow_trail()
+{
+    IR_update();
+    if (IR_M)
+    {
+        if (IR_L)
+        {
+            motor(110, 128);
+        }
+        else if (IR_R)
+        {
+            motor(128, 110);
+        }
+        else
+        {
+            motor(128, 128);
+        }
+    }
+    else
+    {
+        if (IR_L || IR_LL)
+        {
+            if (IR_LL)
+            {
+                motor(15, 123);
+            }
+            else
+            {
+                motor(50, 128);
+            }
+        }
+        else if (IR_R || IR_RR)
+        {
+            if (IR_RR)
+            {
+                motor(123, 15);
+            }
+            else
+            {
+                motor(128, 50);
+            }
+        }
+    }
+}
+
+void OLED_init()
+{
+    // 初始化 OLED 顯示器
+    u8g2.begin();
+}
+
+void OLED_display()
+{
+    // 清除顯示器，準備更新顯示的內容
+    u8g2.clearBuffer();
+
+    // 設定顯示文字的位置
+    u8g2.setFont(u8g2_font_ncenB08_tr);
+    // 顯示各個變數的數值
+    u8g2.setCursor(0, 10);
+    u8g2.print("IR_LL: ");
+    u8g2.print(analogRead(IR[0]));
+
+    u8g2.setCursor(0, 20);
+    u8g2.print("IR_L: ");
+    u8g2.print(analogRead(IR[1]));
+
+    u8g2.setCursor(0, 30);
+    u8g2.print("IR_M: ");
+    u8g2.print(analogRead(IR[2]));
+
+    u8g2.setCursor(0, 40);
+    u8g2.print("IR_R: ");
+    u8g2.print(analogRead(IR[3]));
+
+    u8g2.setCursor(0, 50);
+    u8g2.print("IR_RR: ");
+    u8g2.print(analogRead(IR[4]));
+
+    // 顯示更新的內容到 OLED 上
+    u8g2.sendBuffer();
+    delay(100);
 }
