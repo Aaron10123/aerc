@@ -100,18 +100,28 @@ void loop()
     }
     forward();
     delay(100);
-    cmd_for_ms(trail, 300);
-    while (!(IR_L == 0 && IR_R == 0 && IR_M == 0))
-    {
-        trail();
-    }
-    motor(140, -110);
-    delay(250);
-    while (!(IR_RR))
+
+    PID_trail(false, []()
+              { return (false); }, 40, 0, 0, 100, 500); //(4↑)  1250
+    PID_trail(false, []()
+              { return (IR_L == 0 && IR_M == 0 && IR_R == 0); }, 40, 0, 0, 100, 0); //(4↑)  1250
+    stop();
+
+    unsigned long startTime = millis();
+    // while (!(IR_M))
+    while (true)
     {
         IR_update();
-        motor(60, 225);
+        motor(70, -100);
+
+        if (millis() - startTime >= 300)
+        {
+            break;
+        }
     }
+
+    PID_trail_left(false, []()
+                   { return (false); }, 50, 90, 0, 100, 1250); //(4↑)  1250
 
     stop();
 }
