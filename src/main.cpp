@@ -102,9 +102,9 @@ void loop()
     delay(100);
 
     PID_trail(false, []()
-              { return (false); }, 40, 0, 0, 100, 500); //(4↑)  1250
+              { return (false); }, 40, 0, 0, 100, 500); //(3↑)  1250
     PID_trail(false, []()
-              { return (IR_L == 0 && IR_M == 0 && IR_R == 0); }, 40, 0, 0, 100, 0); //(4↑)  1250
+              { return (IR_L == 0 && IR_M == 0 && IR_R == 0); }, 40, 0, 0, 100, 0); //(3↑)  1250
     stop();
 
     unsigned long startTime = millis();
