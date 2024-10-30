@@ -9,6 +9,9 @@
 - `motorLeftDir`：左輪馬達方向
 - `motorRightDir`：右輪馬達方向
 - `IR[5]`：紅外線數值
+- `trigPin`：超音波 trig 引腳
+- `echoPin`：超音波 echo 引腳
+- `distance`：超音波量測距離
 
 函數宣告：
 
@@ -17,7 +20,7 @@
 - `updateRightPulse()`：更新右輪的脈衝數
 - `motor(int speedL, int speedR)`：控制左右輪的馬達
 - `controlMotors(int speedL, int speedR, long targetPulses, bool autoSync)`：控制左右輪的馬達，並移動到指定的目標脈衝數
-- `PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, float Ki, int baseSpeed, unsigned long ms)`：PID循跡
+- `PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, float Ki, int baseSpeed, unsigned long ms, bool useUltraSonic)`：PID循跡
 - `PID_trail_left(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, float Ki, int baseSpeed, unsigned long ms)`：PID循跡（左）
 - `trail()`：循跡
 - `small_turn_left()`：小左轉
@@ -33,6 +36,8 @@
 - `slow_trail()`：緩慢循跡
 - `OLED_init()`：OLED 初始化
 - `OLED_display()`：OLED 顯示
+- `ultrasonic()`：超音波量測距離
+- `echoISR()`：超音波回波中斷
 
 ### [src/main.cpp](src/main.cpp)
 
