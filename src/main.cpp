@@ -255,6 +255,8 @@ void loop()
     PID_trail(false, []()
               { return (IR_LL == 0); }, 30, 0, 0, 100, 0);
 
+    motor(100, 100);
+    delay(50);
     IR_update();
     while (!(IR_LL))
     {
@@ -323,7 +325,6 @@ void loop()
 
     PID_trail(false, []()
               { return (IR_RR == 1); }, 30, 0, 0, 100, 0); //(18↑)
-
 
     PID_trail(false, []()
               { return (IR_RR == 0 and IR_LL == 0); }, 30, 0, 0, 100, 0); //(18↑)
