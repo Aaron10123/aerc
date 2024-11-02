@@ -170,15 +170,91 @@ void loop()
     // cmd_for_ms([]()
     //            { motor(-25, 165); }, 250);    要改條件式**********
 
-    PID_trail(false, []()
-              { return (IR_LL == 1); }, 30, 0, 0, 100, 0);
+    // PID_trail(false, []()
+    //           { return (IR_LL == 1); }, 30, 0, 0, 100, 0); //(8↑)
 
-    IR_update();
-    while (!(IR_LL == 0 && IR_L == 0))
-    {
-        IR_update();
-        motor(100, 100);
-    }
+    // IR_update();
+    // while (!(IR_LL == 0 && IR_L == 0))
+    // {
+    //     IR_update();
+    //     motor(100, 100);
+    // }
+    // IR_update();
+    // while (!(IR_LL))
+    // {
+    //     IR_update();
+    //     motor(-25, 165);
+    // }
+
+    // PID_trail(false, []()
+    //           { return (IR_RR == 1); }, 30, 0, 0, 100, 0); //(9↑)
+
+    // PID_trail(false, []()
+    //           { return (false); }, 30, 0, 0, 100, 100);
+
+    // PID_trail(false, []()
+    //           { return (IR_RR == 1); }, 30, 0, 0, 100, 0);
+
+    // IR_update();
+    // while (!(IR_RR == 0 && IR_R == 0))
+    // {
+    //     IR_update();
+    //     motor(100, 100);
+    // }
+    // IR_update();
+    // while (!(IR_RR))
+    // {
+    //     IR_update();
+    //     motor(110, -25);
+    // }
+
+    // PID_trail(false, []()
+    //           { return (IR_RR == 1); }, 30, 0, 0, 100, 0); //(10↑)
+
+    // IR_update();
+    // while (!(IR_R == 0))
+    // {
+    //     IR_update();
+    //     motor(100, 100);
+    // }
+    // IR_update();
+    // while (!(IR_R))
+    // {
+    //     IR_update();
+    //     motor(120, -25);
+    // }
+
+    // PID_trail(true, []()
+    //           { return (false); }, 20, 0, 0, 70, 650); //(12↑)
+
+    // PID_trail(false, []()
+    //           { return (false); }, 10, 0, 0, 100, 1000);
+
+    // PID_trail(false, []()
+    //           { return (IR_LL == 1); }, 30, 0, 0, 100, 0); //(13↑)
+
+    // PID_trail(false, []()
+    //           { return (IR_LL == 0); }, 30, 0, 0, 100, 0);
+
+    // IR_update();
+    // while (!(IR_LL))
+    // {
+    //     IR_update();
+    //     motor(-25, 165);
+    // }
+
+    // IR_update();
+    // while (!(IR_LL ==0))
+    // {
+    //     IR_update();
+    //     motor(-25, 165);
+    // }
+    PID_trail(false, []()
+              { return (IR_LL == 1); }, 30, 0, 0, 100, 0); //(13↑)
+
+    PID_trail(false, []()
+              { return (IR_LL == 0); }, 30, 0, 0, 100, 0);
+
     IR_update();
     while (!(IR_LL))
     {
@@ -186,13 +262,85 @@ void loop()
         motor(-25, 165);
     }
 
-    PID_trail(false, []()
-              { return (IR_RR == 1); }, 30, 0, 0, 100, 0);
+    IR_update();
+    while (!(IR_LL == 0))
+    {
+        IR_update();
+        motor(-25, 165);
+    }
 
     PID_trail(false, []()
-              { return (false); }, 30, 0, 0, 100, 100);
+              { return (IR_RR == 1); }, 30, 0, 0, 100, 0); //(14↑)
+
+    IR_update();
+    while (!(IR_RR == 0))
+    {
+        IR_update();
+        motor(100, 100);
+    }
+    IR_update();
+    while (!(IR_LL == 1))
+    {
+        IR_update();
+        motor(120, -25);
+    }
+
+    while (!(IR_LL == 0))
+    {
+        IR_update();
+        motor(120, -25);
+    }
+    while (!(IR_RR))
+    {
+        IR_update();
+        motor(120, -25);
+    }
+    while (!(IR_RR == 0))
+    {
+        IR_update();
+        motor(120, -25);
+    } //(15↑)
+
+    PID_trail(true, []()
+              { return (false); }, 30, 0, 0, 100, 2000); //(16,17↑)
 
     PID_trail(false, []()
-              { return (IR_RR == 1); }, 30, 0, 0, 100, 0);
+              { return (IR_LL == 1); }, 30, 0, 0, 100, 0); //(16,17↑)
+    PID_trail(false, []()
+              { return (IR_LL == 0); }, 30, 0, 0, 100, 0); //(16,17↑)
+
+    while (!(IR_LL == 1))
+    {
+        IR_update();
+        motor(-25, 120);
+    }
+
+    while (!(IR_LL == 0))
+    {
+        IR_update();
+        motor(-25, 120);
+    }
+
+    PID_trail(false, []()
+              { return (IR_RR == 1); }, 30, 0, 0, 100, 0); //(18↑)
+
+
+    PID_trail(false, []()
+              { return (IR_RR == 0 and IR_LL == 0); }, 30, 0, 0, 100, 0); //(18↑)
+
+    while (!(IR_LL == 1))
+    {
+        IR_update();
+        motor(-25, 120);
+    }
+
+    while (!(IR_LL == 0))
+    {
+        IR_update();
+        motor(-25, 120);
+    }
+
+    PID_trail(false, []()
+              { return (IR_L == 1 and IR_R == 1 and IR_M == 1); }, 30, 0, 0, 100, 0); //(19↑)
     stop();
 }
