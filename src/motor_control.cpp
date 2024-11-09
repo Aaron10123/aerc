@@ -574,3 +574,63 @@ void echoISR()
         distance = (duration / 2.0) / 29.1;
     }
 }
+
+void PID_rightU()
+{
+    PID_trail(false, []()
+              { return (IR_RR == 1); }, 30, 0, 0, 100, 0); //(11)
+    PID_trail(false, []()
+              { return (IR_RR == 0); }, 30, 0, 0, 100, 0); //(11)
+
+    IR_update();
+    while (!(IR_RR))
+    {
+        motor(125, -25);
+        IR_update();
+    }
+    while (!(IR_RR == 0))
+    {
+        motor(125, -25);
+        IR_update();
+    }
+    PID_trail(false, []()
+              { return (IR_RR == 1); }, 30, 0, 0, 100, 0); //(10)
+    PID_trail(false, []()
+              { return (IR_RR == 0); }, 30, 0, 0, 100, 0); //(10)
+    IR_update();
+    while (!(IR_RR))
+    {
+        motor(125, -25);
+        IR_update();
+    }
+}
+
+void PID_leftU()
+{
+    PID_trail(false, []()
+              { return (IR_LL == 1); }, 30, 0, 0, 100, 0); //(11)
+    PID_trail(false, []()
+              { return (IR_LL == 0); }, 30, 0, 0, 100, 0); //(11)
+
+    IR_update();
+    while (!(IR_LL))
+    {
+        motor(-25, 125);
+        IR_update();
+    }
+    while (!(IR_LL == 0))
+    {
+        motor(-25, 125);
+        IR_update();
+    }
+    PID_trail(false, []()
+              { return (IR_LL == 1); }, 30, 0, 0, 100, 0); //(10)
+    PID_trail(false, []()
+              { return (IR_LL == 0); }, 30, 0, 0, 100, 0); //(10)
+    IR_update();
+    while (!(IR_LL))
+    {
+        motor(-25, 125);
+        IR_update();
+    }
+}

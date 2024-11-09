@@ -75,4 +75,8 @@ void OLED_display();
 void ultrasonic();
 // 超音波回波中斷
 void echoISR();
+// PID 右轉U
+void PID_rightU();
+// PID 左轉U
+void PID_leftU();
 #endif // MOTOR_CONTROL_H
