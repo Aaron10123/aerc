@@ -191,8 +191,6 @@ void loop()
 
     PID_trail(true, []()
               { return (false); }, 30, 0, 0, 100, 800);
-    // PID_trail(true, []()
-    //           { return (IR_RR == 0); }, 30, 0, 0, 100, 0);
     PID_trail(false, []()
               { return (IR_R == 1 and IR_M == 1 and IR_L == 1); }, 80, 90, 0, 250, 0);
 
