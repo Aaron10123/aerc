@@ -682,3 +682,53 @@ void PID_leftU()
         IR_update();
     }
 }
+
+void PID_right(int baseSpeed, int turnSpeedL, int turnSpeedR, float Kp, float Kd, bool useStop)
+{
+    PID_trail(false, []()
+              { return (IR_RR == 1); }, Kp, Kd, 0, baseSpeed, 0);
+    while (!(IR_RR == 0))
+    {
+        motor(baseSpeed, baseSpeed);
+        IR_update();
+    }
+    if (useStop)
+    {
+        stop();
+    }
+    while (!(IR_RR))
+    {
+        IR_update();
+        motor(turnSpeedL, turnSpeedR);
+    }
+    while (!(IR_RR == 0))
+    {
+        IR_update();
+        motor(turnSpeedL, turnSpeedR);
+    }
+}
+
+void PID_left(int baseSpeed, int turnSpeedL, int turnSpeedR, float Kp, float Kd, bool useStop)
+{
+    PID_trail(false, []()
+              { return (IR_LL == 1); }, Kp, Kd, 0, baseSpeed, 0);
+    while (!(IR_LL == 0))
+    {
+        motor(baseSpeed, baseSpeed);
+        IR_update();
+    }
+    if (useStop)
+    {
+        stop();
+    }
+    while (!(IR_LL))
+    {
+        IR_update();
+        motor(turnSpeedL, turnSpeedR);
+    }
+    while (!(IR_LL == 0))
+    {
+        IR_update();
+        motor(turnSpeedL, turnSpeedR);
+    }
+}

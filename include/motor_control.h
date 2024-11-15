@@ -83,4 +83,8 @@ void PID_rightU();
 void PID_leftL();
 // PID 左轉U
 void PID_leftU();
+// PID之後右轉, 參數: 基礎速度, 左輪速度, 右輪速度, Kp, Kd, 離開黑線後是否停止
+void PID_right(int baseSpeed, int turnSpeedL, int turnSpeedR, float Kp = 30, float Kd = 0, bool useStop = false);
+// PID之後左轉, 參數: 基礎速度, 左輪速度, 右輪速度, Kp, Kd, 離開黑線後是否停止
+void PID_left(int baseSpeed, int turnSpeedL, int turnSpeedR, float Kp = 30, float Kd = 0, bool useStop = false);
 #endif // MOTOR_CONTROL_H
