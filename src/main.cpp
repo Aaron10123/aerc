@@ -57,20 +57,21 @@ void loop()
     delay(1000);
 
     PID_trail(true, []()
-              { return (false); }, 30, 0, 0, 100, 3250); //(1-3)
-    PID_right(100, 125, -25, 30, 0);                     //(4)
-    PID_right(120, 100, -100, 30, 0);                    //(4)    //修!!!
-    while (!(IR_M))                                      // 確保面相虛線時是非常正的
+              { return (IR_LL == 1); }, 30, 0, 0, 100, 0); //(1-3)
+    PID_trail(true, []()
+              { return (false); }, 30, 0, 0, 100, 600); //(1-3)
+    PID_trail(true, []()
+              { return (IR_RR == 1); }, 30, 0, 0, 100, 0); //(1-3)
+    PID_right(100, 125, -25, 30, 0);                       //(4)
+    PID_right(120, 50, -120, 30, 0, true);                 //(4)   //修
+    while (!(IR_M))                                        // 確保面相虛線時是非常正的
     {
         IR_update();
         motor(90, -90);
     }
     stop(); // 不要刪除
-    while (!(IR_LL))
-    {
-        IR_update();
-        motor(140, 150); // 走虛線的衝刺，需要調整速度確保直行
-    }
+    PID_trail(false, []()
+              { return (IR_LL == 1); }, 30, 0, 0, 100, 0);
     stop(); // 不要刪除
     while (!(IR_LL == 0))
     {
@@ -103,7 +104,7 @@ void loop()
               { return (IR_RR == 0); }, 80, 0, 0, 250, 0); //(8)
 
     PID_left(100, -25, 135, 30, 0, true); //(6)
-    PID_right(100, 125, -25, 30, 0);      //(6)
+    PID_right(100, 100, -100, 30, 0);     //(6)
     // ? ///////////////////////////////////////測試中///////////////////////////////////////
     PID_left(100, -100, 100);
     PID_trail(true, []()
@@ -194,25 +195,7 @@ void loop()
     }
     PID_right(100, 100, -100, 30, 0, true);
     PID_trail(true, []()
-              { return (IR_LL == 1); }, 80, 90, 0, 250, 0);
-    while (!(IR_LL == 0))
-    {
-        motor(100, 100);
-        IR_update();
-    }
-    while (!(IR_LL))
-    {
-        IR_update();
-        motor(-100, 100);
-    }
-    while (!(IR_LL == 0))
-    {
-        IR_update();
-        motor(-100, 100);
-    }
-
-    PID_trail(true, []()
-              { return (false); }, 30, 0, 0, 100, 800);
+              { return (false); }, 30, 0, 0, 100, 2000);
     PID_trail(false, []()
               { return (IR_R == 1 and IR_M == 1 and IR_L == 1); }, 80, 90, 0, 250, 0);
 
