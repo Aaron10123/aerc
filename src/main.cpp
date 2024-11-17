@@ -55,148 +55,256 @@ void loop()
     }
     delay(1000);
 
+    // ! /////////////////////////////////////1-12/////////////////////////////////////
+
     PID_trail(true, []()
-              { return (IR_LL == 1); }, 30, 0, 0, 100, 0); //(1-3)
+              { return (false); }, 80, 0, 0, 250, 500); // 1的循跡
     PID_trail(true, []()
-              { return (false); }, 30, 0, 0, 100, 600); //(1-3)
-    PID_trail(true, []()
-              { return (IR_RR == 1); }, 30, 0, 0, 100, 0); //(1-3)
-    PID_right(100, 125, -25, 30, 0);                       //(4)
-    PID_right(120, 50, -120, 30, 0, true);                 //(4)   //修
-    while (!(IR_M))                                        // 確保面相虛線時是非常正的
-    {
-        IR_update();
-        motor(90, -90);
-    }
-    stop(); // 不要刪除
-    PID_trail(false, []()
-              { return (IR_LL == 1); }, 30, 0, 0, 100, 0);
-    stop(); // 不要刪除
-    while (!(IR_LL == 0))
-    {
-        IR_update();
-        motor(-25, 125);
-    }
+              { return (false); }, 30, 0, 0, 100, 3400); // 2 - 4的循跡
+
+    PID_right(100, 125, -25); // 4的右直角
+    PID_right(100, 125, -25); // 4的右直角
+
+    motor(125, -25);
+    delay(150);
+    stop();
     while (!(IR_LL))
     {
         IR_update();
+        motor(100, 100);
+    }
+    while (!(IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 0))
+    {
+        IR_update();
+        motor(100, 100);
+    }
+    stop();
+    while (!(IR_RR == 1))
+    {
+        IR_update();
         motor(-25, 125);
     }
-    while (!(IR_LL == 0))
-    {
-        IR_update();
-        motor(-25, 125);
-    }
-    PID_left(100, -25, 135, 30, 0);  //(6)
-    PID_right(100, 125, -25, 30, 0); //(6)
-    PID_trail(false, []()
-              { return (IR_RR == 1); }, 80, 0, 0, 250, 0); //(8)
-    PID_trail(false, []()
-              { return (IR_RR == 0); }, 80, 0, 0, 250, 0); //(8)
-    PID_trail(false, []()
-              { return (IR_RR == 1); }, 80, 0, 0, 250, 0); //(8)
-    PID_trail(false, []()
-              { return (IR_RR == 0); }, 80, 0, 0, 250, 0); //(8)
-    PID_trail(false, []()
-              { return (IR_RR == 1); }, 80, 0, 0, 250, 0); //(8)
-    PID_trail(false, []()
-              { return (IR_RR == 0); }, 80, 0, 0, 250, 0); //(8)
-
-    PID_left(100, -25, 135, 30, 0, true); //(6)
-    PID_right(100, 100, -100, 30, 0);     //(6)
-    // ? ///////////////////////////////////////測試中///////////////////////////////////////
-    PID_left(100, -100, 100);
-    PID_trail(true, []()
-              { return (IR_LL == 1); }, 30, 0, 0, 100, 0);
-
-    while (!(IR_LL == 0))
-    {
-        motor(100, 100);
-        IR_update();
-    }
-    while (!(IR_L))
-    {
-        IR_update();
-        motor(-100, 100);
-    }
-    PID_trail(false, []()
-              { return (IR_LL == 1); }, 30, 0, 0, 100, 0);
-    while (!(IR_LL == 0))
-    {
-        motor(100, 100);
-        IR_update();
-    }
-    while (!(IR_L))
-    {
-        IR_update();
-        motor(-100, 100);
-    }
-    PID_trail(false, []()
-              { return (false); }, 30, 0, 0, 100, 100);
-    stop();
-    // ? ///////////////////////////////////////測試中///////////////////////////////////////
-    // ! ///////////////////////////////////////開始避障///////////////////////////////////////
-    distance = 0;
-    PID_trail(false, []()
-              { return (distance <= 20 && distance > 0); }, 30, 0, 0, 100, 0, true);
-    stop();
-    IR_update();
-    while (!(IR_LL))
-    {
-        motor(100, -100);
-        IR_update();
-    }
-
-    while (!(IR_LL == 0))
-    {
-        motor(250, -250);
-        IR_update();
-    }
-    while (!(IR_L))
-    {
-        IR_update();
-        motor(80, 190);
-    }
-    distance = 0;
-    PID_trail(false, []()
-              { return (distance <= 20 && distance > 0); }, 30, 0, 0, 50, 0, true);
-
-    stop();
-    IR_update();
-    while (!(IR_RR))
-    {
-        motor(-100, 100);
-        IR_update();
-    }
-
+    
     while (!(IR_RR == 0))
     {
-        motor(-250, 250);
         IR_update();
+        motor(-25, 125);
     }
-    while (!(IR_R))
-    {
-        IR_update();
-        motor(205, 100);
-    }
-    PID_left(100, -100, 100);
-    // ! ///////////////////////////////////////結束避障///////////////////////////////////////
-    PID_left(100, -100, 100);
-    PID_left(100, -100, 100);
-    PID_trail(false, []()
-              { return (false); }, 30, 0, 0, 100, 400);
-    PID_trail(false, []()
-              { return (IR_RR == 0 && IR_R == 0 && IR_M == 0 && IR_L == 0 && IR_LL == 0); }, 30, 0, 0, 100, 0);
-    while (!(IR_RR || IR_R || IR_M || IR_L || IR_LL))
-    {
-        motor(255, 255);
-        IR_update();
-    }
-    PID_right(100, 100, -100, 30, 0, true);
-    PID_trail(true, []()
-              { return (false); }, 30, 0, 0, 100, 2000);
-    PID_trail(false, []()
-              { return (IR_R == 1 and IR_M == 1 and IR_L == 1); }, 80, 90, 0, 250, 0);
+    // PID_right(100, 100, -100); // 4的右直角
+    // PID_right(100, 100, -100); // 5的右直角
+    // delay(70);
+    // motor(100, 100);
+    // delay(150);                // 可能要調整 (越過6的十字)
+    // PID_left(100, -100, 100);  // 6的左直角
+    // PID_left(100, -100, 100);  // 7的左直角
+    // PID_right(100, 100, -100); // 8的右直角
+    // PID_left(100, -100, 100);  // 9的左直角
+    // PID_right(100, 100, -100); // 10的右直角
+    // PID_trail(true, []()
+    //           { return (false); }, 30, 0, 0, 200, 300); // 10的循跡
+    // PID_right(100, 100, -100);                          // 10的右直角
+    // PID_left(100, -100, 100);                           // 11的左直角
+    // PID_left(100, -100, 100);                           // 11的銳角
+    // PID_left(100, -100, 100);                           // 11的左修正
+
+    // PID_trail(false, []()
+    //           { return (false); }, 40, 0, 0, 100, 500); // 12的循跡, 讓車子盡量直行
+
+    // PID_trail(false, []()
+    //           { return (IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 0); }, 40, 0, 0, 100, 0); // 12的循跡, 讓車子盡量直行
+
+    // IR_update();
+    // while (!(IR_LL || IR_L || IR_M || IR_R || IR_RR))
+    // {
+    //     IR_update();
+    //     motor(255, 255);
+    // }
+    // cmd_for_ms(trail, 300);
+    // PID_left(90, -100, 90, 50, 50, true); // 12的左轉
+    // // ! /////////////////////////////////////13-24/////////////////////////////////////
+    // int U_250_time = 300;
+    // int U_speed_R = 120;
+    // int U_speed_L = 90;
+
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     // 右U開始
+    //     PID_trail(false, []()
+    //               { return false; }, 100, 0, 0, 250, U_250_time);
+    //     PID_right(100, U_speed_R, 0, 35, 0, true);
+    //     // 左U開始
+    //     PID_trail(false, []()
+    //               { return false; }, 100, 0, 0, 250, U_250_time);
+    //     PID_left(100, 0, U_speed_L, 35, 0, true);
+    // } // 連續大U結束
+    // // ! /////////////////////////////////////小U開始/////////////////////////////////////
+    // for (int i = 0; i < 2; i++)
+    // {
+    //     // TODO: VERY IMPORTANT (test the function): emotional_damage_weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee();
+    //     // ? ///////////////////////////////////// 測試中 (結束) /////////////////////////////////////
+    //     // PID_trail(false, []()
+    //     //           { return (IR_RR == 1); }, 35, 0, 0, 100, 0);
+    //     // IR_update();
+    //     // while (!(IR_RR == 0))
+    //     // {
+    //     //     IR_update();
+    //     //     motor(100, 100);
+    //     // }
+    //     // IR_update();
+    //     // while (!(IR_RR))
+    //     // {
+    //     //     IR_update();
+    //     //     motor(90, -100);
+    //     // }
+    //     // IR_update();
+    //     // while (!(IR_RR == 0))
+    //     // {
+    //     //     IR_update();
+    //     //     motor(90, -100);
+    //     // }
+
+    //     // ? ///////////////////////////////////// 測試中 (結束) /////////////////////////////////////
+    //     // PID_trail(false, []()
+    //     //   { return (IR_RR == 1); }, 35, 0, 0, 100, 0);
+    //     //     IR_update();
+    //     //     while (!(IR_RR == 0))
+    //     //     {
+    //     //         IR_update();
+    //     //         motor(100, 100);
+    //     //     }
+    //     //     IR_update();
+    //     //     while (!(IR_RR))
+    //     //     {
+    //     //         IR_update();
+    //     //         motor(90, -100);
+    //     //     }
+    //     //     IR_update();
+    //     //     while (!(IR_RR == 0))
+    //     //     {
+    //     //         IR_update();
+    //     //         motor(90, -100);
+    //     //     }
+    //     //     PID_trail(false, []()
+    //     //               { return (IR_LL == 1); }, 35, 0, 0, 100, 0);
+    //     //     IR_update();
+    //     //     while (!(IR_LL == 0))
+    //     //     {
+    //     //         IR_update();
+    //     //         motor(100, 100);
+    //     //     }
+    //     //     stop();
+    //     //     IR_update();
+    //     //     while (!(IR_LL))
+    //     //     {
+    //     //         IR_update();
+    //     //         motor(0, U_speed_L);
+    //     //     }
+    //     //     while (!(IR_LL == 0))
+    //     //     {
+    //     //         IR_update();
+    //     //         motor(0, U_speed_L);
+    //     //     }
+    //     PID_right(100, 90, -100, 35, 0);
+    //     PID_right(100, 90, -100, 35, 0);
+    //     PID_left(100, 20, U_speed_R, 35, 0, true);
+    // }
+
+    // PID_trail(false, []()
+    //           { return false; }, 30, 10, 0, 100, 400);
+    // PID_left(100, -100, 100, 35, 0, true);
+
+    // distance = 0;
+    // PID_trail(false, []()
+    //           { return (distance > 0 && distance <= 15); }, 40, 0, 0, 100, 0, true);
+    // stop();
+    // // PID_trail(false, []()
+    // //            { return (false); }, 100, 0, 0, 250, 200);
+    // // PID_trail(false, []()
+    // //           { return (IR_LL == 1); }, 35, 0, 0, 100, 0);
+    // // IR_update();
+    // // while (!(IR_LL == 0))
+    // // {
+    // //     IR_update();
+    // //     motor(100, 100);
+    // // }
+    // // ! /////////////////////////////////////小U結束/////////////////////////////////////
+    // // IR_update();
+    // // while (!(IR_LL)) // 左轉直到LL看到黑線
+    // // {
+    // //     IR_update();
+    // //     motor(-100, 90);
+    // // }
+    // // while (!(IR_LL == 0)) // 左轉直到LL看到白線
+    // // {
+    // //     IR_update();
+    // //     motor(-100, 90);
+    // // }
+    // // ! /////////////////////////////////////開始避障循跡///////////////////////////////////////
+    // while (!(IR_LL))
+    // {
+    //     IR_update();
+    //     motor(100, 0);
+    // }
+    // while (!(IR_LL == 0))
+    // {
+    //     IR_update();
+    //     motor(100, 0);
+    // }
+    // delay(100);
+    // while (!(IR_L))
+    // {
+    //     IR_update();
+    //     motor(40, 100);
+    // }
+    // // ! /////////////////////////////////////結束避障循跡///////////////////////////////////////
+    // PID_right(100, 100, -100);
+    // PID_right(100, 100, -100);
+    // PID_right(100, 100, -100);
+    // PID_trail(false, []()
+    //           { return (IR_R && IR_M && IR_L); }, 35, 0, 0, 250, 0);
+    // IR_update();
+    // motor(-100, -100);
+    // delay(100);
+
+    // // PID_trail(false, []()
+    // //           { return (IR_RR == 1); }, 35, 0, 0, 100, 0);
+    // // IR_update();
+    // // while (!(IR_RR == 0))
+    // // {
+    // //     IR_update();
+    // //     motor(100, 100);
+    // // }
+    // // while (!(IR_RR))
+    // // {
+    // //     IR_update();
+    // //     motor(90, -100);
+    // // }
+    // // while (!(IR_RR == 0))
+    // // {
+    // //     IR_update();
+    // //     motor(90, -100);
+    // // }
+    // // PID_trail(false, []()
+    // //           { return (IR_RR == 1); }, 35, 0, 0, 100, 0);
+    // // IR_update();
+    // // while (!(IR_RR == 0))
+    // // {
+    // //     IR_update();
+    // //     motor(100, 100);
+    // // }
+    // // while (!(IR_RR))
+    // // {
+    // //     IR_update();
+    // //     motor(90, -100);
+    // // }
+    // // while (!(IR_RR == 0))
+    // // {
+    // //     IR_update();
+    // //     motor(90, -100);
+    // // }
+    // // PID_trail(false, []()
+    // //           { return (IR_L && IR_M && IR_R); }, 100, 0, 0, 250, 0);
+    // // ! /////////////////////////////////////finish///////////////////////////////////////
 
     stop();
 }
