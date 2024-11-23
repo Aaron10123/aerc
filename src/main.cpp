@@ -130,34 +130,34 @@ void loop()
     // ! /////////////////////////////////////13-24/////////////////////////////////////
     // for (int i = 0; i < 3; i++)
     // {
-        int error = 0;
-        PID_trail(false, []()
-                  { return (false); }, 40, 30, 0, 100, 300);
-        error = PID_trail(true, []()
-                          { return (IR_RR == 1); }, 60, 0, 0, 150, 0);
-        stop();
-        error = PID_trail(true, []()
-                          { return (IR_RR == 0); }, 40, 0, 0, 100, 0, false, error);
-        error = PID_trail(true, []()
-                          { return (IR_RR == 1); }, 40, 0, 0, 100, 0, false, error);
-        PID_trail(false, []()
-                  { return (false); }, 40, 30, 0, 100, 300);
-        error = PID_trail(true, []()
-                          { return (IR_LL == 1); }, 60, 0, 0, 150, 0);
-        stop();
-        error = PID_trail(true, []()
-                          { return (IR_LL == 0); }, 40, 0, 0, 100, 0, false, error);
-        error = PID_trail(true, []()
-                          { return (IR_LL == 1); }, 40, 0, 0, 100, 0, false, error);
-        PID_trail(true, []()                  
-                  { return (false); }, 40, 30, 0, 100, 100);
-        error = PID_trail(true, []()
-                          { return (IR_RR == 1); }, 60, 0, 0, 150, 0);
-        stop();
-        error = PID_trail(true, []()
-                          { return (IR_RR == 0); }, 40, 0, 0, 100, 0, false, error);
-        error = PID_trail(true, []()
-                          { return (IR_RR == 1); }, 40, 0, 0, 100, 0, false, error);
+    int error = 0;
+    PID_trail(false, []()
+              { return (false); }, 40, 30, 0, 100, 300);
+    error = PID_trail(true, []()
+                      { return (IR_RR == 1); }, 60, 0, 0, 150, 0);
+    stop();
+    error = PID_trail(true, []()
+                      { return (IR_RR == 0); }, 40, 0, 0, 100, 0, false, error);
+    error = PID_trail(true, []()
+                      { return (IR_RR == 1); }, 40, 0, 0, 100, 0, false, error);
+    PID_trail(false, []()
+              { return (false); }, 40, 30, 0, 100, 300);
+    error = PID_trail(true, []()
+                      { return (IR_LL == 1); }, 60, 0, 0, 150, 0);
+    stop();
+    error = PID_trail(true, []()
+                      { return (IR_LL == 0); }, 40, 0, 0, 100, 0, false, error);
+    error = PID_trail(true, []()
+                      { return (IR_LL == 1); }, 40, 0, 0, 100, 0, false, error);
+    PID_trail(true, []()
+              { return (false); }, 40, 30, 0, 100, 100); // ! //修
+    error = PID_trail(true, []()
+                      { return (IR_RR == 1); }, 60, 0, 0, 150, 0);
+    stop();
+    error = PID_trail(true, []()
+                      { return (IR_RR == 0); }, 40, 0, 0, 100, 0, false, error);
+    error = PID_trail(true, []()
+                      { return (IR_RR == 1); }, 40, 0, 0, 100, 0, false, error);
     // }
     // int U_250_time = 300;
     // int U_speed_R = 120;
