@@ -30,11 +30,10 @@ void motor(int speedL, int speedR)
 // 排列方式為IR[0]~IR[4]，IR[0]為最左邊的感測器，IR[4]為最右邊的感測器
 // 讀取IR感測器，白色為0，黑色為1
 
-void PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, float Ki, int baseSpeed, unsigned long ms, bool useUltraSonic)
+int PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, float Ki, int baseSpeed, unsigned long ms, bool useUltraSonic, int lastError)
 {
     const int minimumSpeed = -255; // 最小速度
     const int maximumSpeed = 255;  // 最大速度
-    int lastError = 0;             // 上一次的偏差值
     int integral = 0;              // 積分項
 
     unsigned long start_time = millis();
@@ -154,6 +153,7 @@ void PID_trail(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, floa
             break;
         }
     }
+    return lastError;
 }
 
 void trail()
@@ -320,25 +320,43 @@ void OLED_init()
 void OLED_display()
 {
     u8g2.clearBuffer();
-    u8g2.setFont(u8g2_font_6x10_tf); // 改用較小的字型以確保顯示空間足夠
+    u8g2.setFont(u8g2_font_helvB08_tr);
 
-    char buffer[32]; // 用於格式化字串
+    char buffer[32];
 
-    // 使用 sprintf 格式化數值，避免直接使用 print
-    sprintf(buffer, "IR_LL:%4d", analogRead(IR[0]));
+    // 讀取A0並計算電壓
+    double sum = 0;
+    double voltage = 0;
+    int loop = 20;
+    for (int i = 0; i < loop; i++)
+    {
+        int sensorValue = analogRead(A0);
+        voltage = sensorValue * (5.0 / 1023.0) * 5.0 * 0.994;
+        sum += voltage;
+    }
+    voltage = sum / loop;
+    // Serial.println(voltage);
+
+    int intPart = (int)voltage;                         // 整數部分
+    int decimalPart = (int)((voltage - intPart) * 100); // 小數部分（保留兩位小數）
+
+    sprintf(buffer, "Volt:%d.%02dV", intPart, abs(decimalPart));
     u8g2.drawStr(0, 10, buffer);
 
-    sprintf(buffer, "IR_L:%4d", analogRead(IR[1]));
+    sprintf(buffer, "IR_LL:%4d", analogRead(IR[0]));
     u8g2.drawStr(0, 20, buffer);
 
-    sprintf(buffer, "IR_M:%4d", analogRead(IR[2]));
+    sprintf(buffer, "IR_L:%4d", analogRead(IR[1]));
     u8g2.drawStr(0, 30, buffer);
 
-    sprintf(buffer, "IR_R:%4d", analogRead(IR[3]));
+    sprintf(buffer, "IR_M:%4d", analogRead(IR[2]));
     u8g2.drawStr(0, 40, buffer);
 
-    sprintf(buffer, "IR_RR:%4d", analogRead(IR[4]));
+    sprintf(buffer, "IR_R:%4d", analogRead(IR[3]));
     u8g2.drawStr(0, 50, buffer);
+
+    sprintf(buffer, "IR_RR:%4d", analogRead(IR[4]));
+    u8g2.drawStr(0, 60, buffer);
 
     u8g2.sendBuffer();
     delay(100);
