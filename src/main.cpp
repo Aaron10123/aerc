@@ -23,6 +23,9 @@ volatile unsigned long echoEnd = 0;   // 超音波回波結束時間
 
 // A1~A5為紅外線數值
 const int IR[5] = {A1, A2, A3, A4, A5};
+// ew
+unsigned long startTime = 0; // 新增：記錄開始時間
+unsigned long lapTime = 0;   // 新增：記錄單圈時間
 
 void setup()
 {
@@ -34,6 +37,8 @@ void setup()
     pinMode(motorRightDir, OUTPUT);
     pinMode(trigPin, OUTPUT);
     pinMode(echoPin, INPUT);
+    pinMode(A0, INPUT); // 設定A0為輸入
+
     // 將IR設定為輸入
     for (int i = 0; i < 5; i++)
     {
@@ -43,7 +48,7 @@ void setup()
     OLED_init(); // OLED 初始化
     // Serial.begin(9600);
 }
-
+int error = 0;
 void loop()
 {
     // 按按鈕
@@ -55,8 +60,10 @@ void loop()
     }
     delay(1000);
 
-    // ! /////////////////////////////////////1號電池7.94~7.84  2號電池7.96~7.85/////////////////////////////////////
+    startTime = millis(); // 新增：記錄開始時間
 
+    // * /////////////////////////////////////A圖/////////////////////////////////////
+    // ! /////////////////////////////////////1號電池7.94~7.84  2號電池7.96~7.85/////////////////////////////////////
     // ! /////////////////////////////////////1-12/////////////////////////////////////
 
     // PID_trail(true, []()
@@ -260,4 +267,5 @@ void loop()
               { return (IR_R == 1 && IR_M == 1 && IR_L == 1); }, 80, 90, 0, 250, 0);
 
     stop();
+    lapTime = millis() - startTime; // 新增：計算單圈時間
 }
