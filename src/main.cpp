@@ -65,206 +65,164 @@ void loop()
     // * /////////////////////////////////////A圖/////////////////////////////////////
     // ! /////////////////////////////////////1號電池7.94~7.84  2號電池7.96~7.85/////////////////////////////////////
     // ! /////////////////////////////////////1-12/////////////////////////////////////
+    PID_trail(true, []()
+              { return (false); }, 80, 0, 0, 250, 500); // 1的循跡
+    PID_trail(true, []()
+              { return (false); }, 30, 0, 0, 100, 3400); // 2 - 4的循跡
 
-    // PID_trail(true, []()
-    //           { return (false); }, 80, 0, 0, 250, 500); // 1的循跡
-    // PID_trail(true, []()
-    //           { return (false); }, 30, 0, 0, 100, 3400); // 2 - 4的循跡
-
-    // PID_right(100, 125, -25); // 4的右直角
-    // PID_right(100, 125, -25); // 4的右直角
-
-    // motor(125, -25);
-    // delay(150);
-    // stop();
-    // while (!(IR_LL))
-    // {
-    //     IR_update();
-    //     motor(100, 100);
-    // }
-    // while (!(IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 0))
-    // {
-    //     IR_update();
-    //     motor(100, 100);
-    // }
-    // stop();
-    // while (!(IR_RR == 1))
-    // {
-    //     IR_update();
-    //     motor(60, 125);
-    // }
-
-    // while (!(IR_RR == 0))
-    // {
-    //     IR_update();
-    //     motor(60, 125);
-    // }
-    // IR_update();
-    // motor(100, 100);
-    // delay(150);
-    // while (!(IR_RR == 1))
-    // {
-    //     IR_update();
-    //     motor(125, -100);
-    // }
-    // while (!(IR_RR == 0))
-    // {
-    //     IR_update();
-    //     motor(125, -100);
-    // }
-
-    // PID_left(100, -100, 100);
-    // PID_trail(true, []()
-    //           { return (false); }, 40, 0, 0, 100, 500);
-    // PID_right(100, 100, -100);
-    // PID_left(100, -100, 100);
-    // PID_trail(false, []()
-    //           { return (false); }, 40, 0, 0, 100, 200);
-    // PID_left(100, -100, 100, true);
-    // PID_trail(false, []()
-    //           { return (false); }, 40, 0, 0, 100, 1000);
-
-    // PID_trail(false, []()
-    //           { return (IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 0); }, 40, 0, 0, 100, 0);
-    // IR_update();
-
-    // while (!(IR_LL|| IR_L || IR_M || IR_R || IR_RR))
-    // {
-    //     IR_update();
-    //     motor(110, 100);  // ! //要調整速度
-    // }
-    // PID_trail(true, []()
-    //           { return (false); }, 30, 0, 0, 100, 500);
-    // PID_left(100, -25, 125);
+    PID_right(100, 125, -25);  // 4的右直角
+    PID_right(100, 125, 0);    // 5的右直角
+    PID_left(100, -100, 100);  // 6的左直角
+    PID_left(100, -100, 100);  // 7的左直角
+    PID_right(100, 100, -100); // 8的右直角
+    PID_left(100, -100, 100);  // 9的左直角
+    PID_right(100, 100, -100); // 10的右直角
+    PID_right(100, 100, -100); // 10的右直角
+    PID_left(100, -100, 100);  // 10的左直角
+    PID_left(100, -100, 100);  // 11的銳角
+    PID_left(100, -100, 100);  // 11的左修正
+    PID_trail(false, []()
+              { return (false); }, 40, 0, 0, 100, 500); // 12的循跡, 讓車子盡量直行
+    PID_trail(false, []()
+              { return (IR_LL == 0 && IR_L == 0 && IR_M == 0 && IR_R == 0 && IR_RR == 0); }, 40, 0, 0, 100, 0);
+    IR_update();
+    while (!(IR_LL || IR_L || IR_M || IR_R || IR_RR))
+    {
+        IR_update();
+        motor(110, 100); // ! //要調整速度
+    }
+    PID_trail(true, []()
+              { return (false); }, 30, 0, 0, 100, 500);
+    PID_left(100, -25, 125);
     // ! /////////////////////////////////////13-24/////////////////////////////////////
     // for (int i = 0; i < 3; i++)
     // {
-    int error = 0;
-    PID_trail(false, []()
-              { return (false); }, 40, 30, 0, 100, 300); // 13
-    error = PID_trail(true, []()
-                      { return (IR_RR == 1); }, 60, 0, 0, 150, 0); // 14
-    stop();
-    error = PID_trail(true, []()
-                      { return (IR_RR == 0); }, 40, 0, 0, 100, 0, false, error);
-    error = PID_trail(true, []()
-                      { return (IR_RR == 1); }, 40, 0, 0, 100, 0, false, error);
-    PID_trail(false, []()
-              { return (false); }, 40, 30, 0, 100, 300);
-    error = PID_trail(true, []()
-                      { return (IR_LL == 1); }, 60, 0, 0, 150, 0); // 15
-    stop();
-    error = PID_trail(true, []()
-                      { return (IR_LL == 0); }, 15, 0, 0, 50, 0, false, error); // 16
-    error = PID_trail(true, []()
-                      { return (IR_L == 1); }, 15, 0, 0, 50, 0, false, error); // 16
-    PID_trail(false, []()
-              { return (false); }, 40, 30, 0, 70, 400); // ! //修 //17
-    error = PID_trail(true, []()
-                      { return (IR_RR == 1); }, 60, 0, 0, 150, 0); // 17
-    stop();
-    error = PID_trail(true, []()
-                      { return (IR_RR == 0); }, 15, 0, 0, 50, 0, false, error);
-    error = PID_trail(true, []()
-                      { return (IR_R == 1); }, 15, 0, 0, 50, 0, false, error);
+    // int error = 0;
+    // PID_trail(false, []()
+    //           { return (false); }, 40, 30, 0, 100, 300); // 13
+    // error = PID_trail(true, []()
+    //                   { return (IR_RR == 1); }, 60, 0, 0, 150, 0); // 14
+    // stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_RR == 0); }, 40, 0, 0, 100, 0, false, error);
+    // error = PID_trail(true, []()
+    //                   { return (IR_RR == 1); }, 40, 0, 0, 100, 0, false, error);
+    // PID_trail(false, []()
+    //           { return (false); }, 40, 30, 0, 100, 300);
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 1); }, 60, 0, 0, 150, 0); // 15
+    // stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 0); }, 15, 0, 0, 50, 0, false, error); // 16
+    // error = PID_trail(true, []()
+    //                   { return (IR_L == 1); }, 15, 0, 0, 50, 0, false, error); // 16
+    // PID_trail(false, []()
+    //           { return (false); }, 40, 30, 0, 70, 400); // ! //修 //17
+    // error = PID_trail(true, []()
+    //                   { return (IR_RR == 1); }, 60, 0, 0, 150, 0); // 17
+    // stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_RR == 0); }, 15, 0, 0, 50, 0, false, error);
+    // error = PID_trail(true, []()
+    //                   { return (IR_R == 1); }, 15, 0, 0, 50, 0, false, error);
 
-    PID_trail(false, []()
-              { return (false); }, 40, 30, 0, 100, 400); // ! //修 //18
-    error = PID_trail(false, []()
-                      { return (IR_LL == 1); }, 60, 0, 0, 150, 0);
-    stop();
-    error = PID_trail(true, []()
-                      { return (IR_LL == 0); }, 15, 0, 0, 50, 0, false, error); //
-    error = PID_trail(true, []()
-                      { return (IR_L == 1); }, 15, 0, 0, 50, 0, false, error); //
-    PID_trail(false, []()
-              { return (false); }, 40, 30, 0, 70, 400); //
-    error = PID_trail(true, []()
-                      { return (IR_RR == 1); }, 60, 0, 0, 150, 0); //
-    stop();
-    error = PID_trail(true, []()
-                      { return (IR_RR == 0); }, 15, 0, 0, 50, 0, false, error);
-    error = PID_trail(true, []()
-                      { return (IR_R == 1); }, 15, 0, 0, 50, 0, false, error);
+    // PID_trail(false, []()
+    //           { return (false); }, 40, 30, 0, 100, 400); // ! //修 //18
+    // error = PID_trail(false, []()
+    //                   { return (IR_LL == 1); }, 60, 0, 0, 150, 0);
+    // stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 0); }, 15, 0, 0, 50, 0, false, error); //
+    // error = PID_trail(true, []()
+    //                   { return (IR_L == 1); }, 15, 0, 0, 50, 0, false, error); //
+    // PID_trail(false, []()
+    //           { return (false); }, 40, 30, 0, 70, 400); //
+    // error = PID_trail(true, []()
+    //                   { return (IR_RR == 1); }, 60, 0, 0, 150, 0); //
+    // stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_RR == 0); }, 15, 0, 0, 50, 0, false, error);
+    // error = PID_trail(true, []()
+    //                   { return (IR_R == 1); }, 15, 0, 0, 50, 0, false, error);
 
-    PID_trail(false, []()
-              { return (false); }, 40, 30, 0, 100, 400); //
+    // PID_trail(false, []()
+    //           { return (false); }, 40, 30, 0, 100, 400); //
 
-    error = PID_trail(true, []()
-                      { return (IR_LL == 1); }, 60, 0, 0, 150, 0); //
-    stop();
-    error = PID_trail(true, []()
-                      { return (IR_LL == 0); }, 40, 0, 0, 130, 0, false, error);
-    error = PID_trail(true, []()
-                      { return (IR_LL == 1); }, 40, 0, 0, 130, 0, false, error);
-    PID_right(100, 125, -25);
-    PID_right(100, 125, -25);
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 1); }, 60, 0, 0, 150, 0); //
+    // stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 0); }, 40, 0, 0, 130, 0, false, error);
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 1); }, 40, 0, 0, 130, 0, false, error);
+    // PID_right(100, 125, -25);
+    // PID_right(100, 125, -25);
 
-    error = PID_trail(true, []()
-                      { return (IR_LL == 1); }, 60, 0, 0, 150, 0); //
-    stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 1); }, 60, 0, 0, 150, 0); //
+    // stop();
 
-    //!////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    error = PID_trail(true, []()
-                      { return (IR_LL == 0); }, 40, 0, 0, 110, 0, false, error);
-    error = PID_trail(true, []()
-                      { return (IR_LL == 1); }, 40, 0, 0, 110, 0, false, error);
+    // ! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 0); }, 40, 0, 0, 110, 0, false, error);
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 1); }, 40, 0, 0, 110, 0, false, error);
 
-    PID_right(100, 125, -25, 40, 30, true); // 27
-    PID_right(100, 145, -55, 40, 30, true); // 27
+    // PID_right(100, 125, -25, 40, 30, true); // 27
+    // PID_right(100, 145, -55, 40, 30, true); // 27
 
-    error = PID_trail(true, []()
-                      { return (IR_LL == 1); }, 60, 0, 0, 150, 0); //
-    stop();
-    error = PID_trail(true, []()
-                      { return (IR_LL == 0); }, 40, 0, 0, 110, 0, false, error);
-    error = PID_trail(true, []()
-                      { return (IR_LL == 1); }, 40, 0, 0, 110, 0, false, error);
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 1); }, 60, 0, 0, 150, 0); //
+    // stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 0); }, 40, 0, 0, 110, 0, false, error);
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 1); }, 40, 0, 0, 110, 0, false, error);
 
-    PID_trail(false, []()
-              { return (false); }, 60, 40, 0, 70, 400); //
-    PID_left(100, -25, 155, 40, 30, true);              //
-                                                        //!////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // PID_trail(false, []()
+    //           { return (false); }, 60, 40, 0, 70, 400); //
+    // PID_left(100, -25, 155, 40, 30, true);              //
+    // ! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    distance = 0;
-    PID_trail(false, []()
-              { return (false); }, 30, 0, 0, 100, 100, true);
-    PID_trail(false, []()
-              { return (distance <= 20 && distance > 0); }, 30, 0, 0, 100, 0, true);
-    stop();
-    IR_update();
-    while (!(IR_LL))
-    {
-        motor(100, -100);
-        IR_update();
-    }
+    // distance = 0;
+    // PID_trail(false, []()
+    //           { return (false); }, 30, 0, 0, 100, 100, true);
+    // PID_trail(false, []()
+    //           { return (distance <= 20 && distance > 0); }, 30, 0, 0, 100, 0, true);
+    // stop();
+    // IR_update();
+    // while (!(IR_LL))
+    // {
+    //     motor(100, -100);
+    //     IR_update();
+    // }
 
-    while (!(IR_LL == 0))
-    {
-        motor(250, -250);
-        IR_update();
-    }
-    while (!(IR_L))
-    {
-        IR_update();
-        motor(100, 190);
-    }
+    // while (!(IR_LL == 0))
+    // {
+    //     motor(250, -250);
+    //     IR_update();
+    // }
+    // while (!(IR_L))
+    // {
+    //     IR_update();
+    //     motor(100, 190);
+    // }
 
-    IR_update();
-    motor(100, 100);
-    delay(100);
-    while (!(IR_RR))
-    {
-        IR_update();
-        motor(125, -25);
-    }
+    // IR_update();
+    // motor(100, 100);
+    // delay(100);
+    // while (!(IR_RR))
+    // {
+    //     IR_update();
+    //     motor(125, -25);
+    // }
 
-    PID_right(100, 125, -25);
-    PID_right(100, 125, -25);
-    PID_right(100, 125, -25);
+    // PID_right(100, 125, -25);
+    // PID_right(100, 125, -25);
+    // PID_right(100, 125, -25);
 
-    PID_trail(false, []()
-              { return (IR_R == 1 && IR_M == 1 && IR_L == 1); }, 80, 90, 0, 250, 0);
+    // PID_trail(false, []()
+    //           { return (IR_R == 1 && IR_M == 1 && IR_L == 1); }, 80, 90, 0, 250, 0);
 
     stop();
     lapTime = millis() - startTime; // 新增：計算單圈時間
