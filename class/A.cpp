@@ -167,10 +167,10 @@ void loop()
         motor(100, 190);
     }
 
-    IR_update();
     motor(100, 100);
     delay(100);
-    while (!(IR_RR))
+    IR_update();
+    while (!(IR_R))
     {
         IR_update();
         motor(125, -25);
