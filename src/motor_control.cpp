@@ -375,11 +375,10 @@ void OLED_display()
     distance = 0;
 }
 
-void PID_trail_left(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, float Ki, int baseSpeed, unsigned long ms)
+int PID_trail_left(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd, float Ki, int baseSpeed, unsigned long ms, int lastError)
 {
     const int minimumSpeed = -255; // 最小速度
     const int maximumSpeed = 255;  // 最大速度
-    int lastError = 0;             // 上一次的偏差值
     int integral = 0;              // 積分項
 
     unsigned long start_time = millis();
@@ -472,6 +471,7 @@ void PID_trail_left(bool useFiveIR, bool (*exitCondition)(), float Kp, float Kd,
             break;
         }
     }
+    return lastError;
 }
 
 void ultrasonic()
