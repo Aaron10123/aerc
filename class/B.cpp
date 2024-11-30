@@ -64,57 +64,57 @@ void loop()
 
     // * /////////////////////////////////////B圖/////////////////////////////////////
     // ! /////////////////////////////////////1號電池7.94~7.84  2號電池7.96~7.85/////////////////////////////////////
-    // 右U開始
-    error = PID_trail(true, []()
-                      { return (IR_RR == 1); }, 100, 100, 0, 200, 0);
-    stop();
-    error = PID_trail(true, []()
-                      { return (IR_RR == 0); }, 20, 0, 0, 70, 0, false, error);
-    error = PID_trail(false, []()
-                      { return (IR_R == 1); }, 20, 0, 0, 70, 0, false, error);
-    stop();
+    // // 右U開始
+    // error = PID_trail(true, []()
+    //                   { return (IR_RR == 1); }, 100, 100, 0, 200, 0);
+    // stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_RR == 0); }, 20, 0, 0, 70, 0, false, error);
+    // error = PID_trail(false, []()
+    //                   { return (IR_R == 1); }, 20, 0, 0, 70, 0, false, error);
+    // stop();
 
-    // 左U開始
-    PID_trail(false, []()
-              { return (false); }, 50, 0, 0, 100, 650);
-    error = PID_trail(true, []()
-                      { return (IR_LL == 1); }, 100, 100, 0, 200, 0);
-    stop();
-    error = PID_trail(true, []()
-                      { return (IR_LL == 0); }, 20, 0, 0, 70, 0, false, error);
-    error = PID_trail(false, []()
-                      { return (IR_L == 1); }, 20, 0, 0, 70, 0, false, error);
-    stop();
+    // // 左U開始
+    // PID_trail(false, []()
+    //           { return (false); }, 50, 0, 0, 100, 650);
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 1); }, 100, 100, 0, 200, 0);
+    // stop();
+    // error = PID_trail(true, []()
+    //                   { return (IR_LL == 0); }, 20, 0, 0, 70, 0, false, error);
+    // error = PID_trail(false, []()
+    //                   { return (IR_L == 1); }, 20, 0, 0, 70, 0, false, error);
+    // stop();
 
-    PID_right(100, 125, -25, 50, 0, true);  //(4) U結束後右直角
-    PID_right(150, 125, -125, 75, 0, true); //(4) 右直角準備接虛線
-    delay(10);                              // ! 調整一下數值讓車子稍微正一些
-    stop();
-    delay(75); // ! 一定要等待車子穩定
-    PID_trail(false, []()
-              { return (false); }, 60, 0, 0, 150, 800); // (5)虛線一開始穩定循跡
-    PID_left(150, -125, 125, 60, 0, true);              // (5)虛線後左直角
-    stop();
-    PID_left(100, -90, 125, 30, 0);  // (6)左直角
-    PID_right(100, 125, -25, 40, 0); //(6)
-    error = PID_trail(false, []()
-                      { return (IR_RR == 1); }, 80, 0, 0, 250, 0, false, error); //(8)
-    error = PID_trail(false, []()
-                      { return (IR_RR == 0); }, 80, 0, 0, 250, 0, false, error); //(8)
-    error = PID_trail(false, []()
-                      { return (IR_RR == 1); }, 80, 0, 0, 250, 0, false, error); //(8)
-    error = PID_trail(false, []()
-                      { return (IR_RR == 0); }, 80, 0, 0, 250, 0, false, error); //(8)
-    error = PID_trail(false, []()
-                      { return (IR_RR == 1); }, 80, 0, 0, 250, 0, false, error); //(8)
-    error = PID_trail(false, []()
-                      { return (IR_RR == 0); }, 80, 0, 0, 250, 0, false, error); //(8)
+    // PID_right(100, 125, -25, 50, 0, true);  //(4) U結束後右直角
+    // PID_right(150, 125, -125, 75, 0, true); //(4) 右直角準備接虛線
+    // delay(10);                              // ! 調整一下數值讓車子稍微正一些
+    // stop();
+    // delay(75); // ! 一定要等待車子穩定
+    // PID_trail(false, []()
+    //           { return (false); }, 60, 0, 0, 150, 800); // (5)虛線一開始穩定循跡
+    // PID_left(150, -125, 125, 60, 0, true);              // (5)虛線後左直角
+    // stop();
+    // PID_left(100, -90, 125, 30, 0);  // (6)左直角
+    // PID_right(100, 125, -25, 40, 0); //(6)
+    // error = PID_trail(false, []()
+    //                   { return (IR_RR == 1); }, 80, 0, 0, 250, 0, false, error); //(8)
+    // error = PID_trail(false, []()
+    //                   { return (IR_RR == 0); }, 80, 0, 0, 250, 0, false, error); //(8)
+    // error = PID_trail(false, []()
+    //                   { return (IR_RR == 1); }, 80, 0, 0, 250, 0, false, error); //(8)
+    // error = PID_trail(false, []()
+    //                   { return (IR_RR == 0); }, 80, 0, 0, 250, 0, false, error); //(8)
+    // error = PID_trail(false, []()
+    //                   { return (IR_RR == 1); }, 80, 0, 0, 250, 0, false, error); //(8)
+    // error = PID_trail(false, []()
+    //                   { return (IR_RR == 0); }, 80, 0, 0, 250, 0, false, error); //(8)
 
-    PID_left(100, -25, 90, 30, 0, true); //(8)的左直角
-    PID_trail(false, []()
-              { return (false); }, 40, 0, 0, 100, 300); // 穩定一小段
-    PID_right(100, 100, -100, 30, 0);                   //(9)的右直角
-    PID_left(100, -100, 100);                           //(10)的左直角
+    // PID_left(100, -25, 90, 30, 0, true); //(8)的左直角
+    // PID_trail(false, []()
+    //           { return (false); }, 40, 0, 0, 100, 300); // 穩定一小段
+    // PID_right(100, 100, -100, 30, 0);                   //(9)的右直角
+    // PID_left(100, -100, 100);                           //(10)的左直角
     PID_right(100, 100, -100, 30, 0);                   //(10)的右直角
     // 右U開始
     error = PID_trail(true, []()
@@ -194,10 +194,12 @@ void loop()
         motor(-250, 250);
         IR_update();
     }
+    stop();
+    delay(1000);
     while (!(IR_R))
     {
         IR_update();
-        motor(210, 70); // ! 繞瓶子速度控制
+        motor(210, 110); // ! 繞瓶子速度控制
     }
     while (!(IR_LL))
     {
